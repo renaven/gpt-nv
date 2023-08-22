@@ -5,7 +5,6 @@ import unicodedata
 import openai
 
 
-
 def nv_grab(url):
     clean = re.compile('<.*?>')
     source_url = url
@@ -30,22 +29,25 @@ def nv_grab(url):
     content = {'head': title, 'body': body}
     return (content)
 
+
 def gpt_query(prefix, query):
     openai.api_key = "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"
     response = openai.ChatCompletion.create(
-    model="gpt-3.5-turbo",
-    messages=[
-        {"role": "system", "content": "You are a news editor's assistant"},
-        {"role": "user", "content": prefix + query},
-    ]
-)
+        model="gpt-4",
+        # model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": "You are a news editor's assistant"},
+            {"role": "user", "content": prefix + query},
+        ]
+    )
 
     result = ''
     for choice in response.choices:
         result += choice.message.content
 
     print(result)
-    return(result)
+    return (result)
+
 
 url = "https://nv.ua/ukr/ukraine/events/v-nasa-sprostuvali-padinnya-suputnika-v-kiyevi-novini-ukrajini-50318987.html"
 article = nv_grab(url)
