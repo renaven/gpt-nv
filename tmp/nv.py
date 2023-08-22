@@ -30,10 +30,11 @@ def nv_grab(url):
     return (content)
 
 
-def gpt_query(prefix, query, oai_key, model_key):
-    openai.api_key = oai_key
+def gpt_query(prefix, query):
+    openai.api_key = "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"
     response = openai.ChatCompletion.create(
-        model=model_key,
+        model="gpt-4",
+        # model="gpt-3.5-turbo",
         messages=[
             {"role": "system", "content": "You are a news editor's assistant"},
             {"role": "user", "content": prefix + query},

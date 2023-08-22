@@ -1,8 +1,18 @@
 from nv import nv_grab, gpt_query
 from time import sleep
+import json
 
 with open('in.txt') as file:
     lines = [line.rstrip() for line in file]
+
+with open('config.json') as config_file:
+    config = json.load(config_file)
+    prefix = config['prompt']
+    oai_key = config['api_key']
+    if config['gpt_4'] == 'true':
+        model_key = 'gpt-4'
+    else:
+        model_key = 'gpt-3.5-turbo'
 
 count = 1
 for url in lines:
@@ -13,9 +23,7 @@ for url in lines:
     for p in article['body']:
         query = query + '\n' + p
 
-    prefix = "I need you to translate a news article from Ukrainian into English, and then edit it in accordance with the AP Style Guide, prioritizing clarity and readability. Here is the article, beginning with the title: "
-
-    result = gpt_query(prefix, query)
+    result = gpt_query(prefix, query, oai_key, model_key)
 
     with open(str(count)+'.txt', 'w', encoding='utf-8') as f:
         for l in result:
