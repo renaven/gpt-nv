@@ -9,15 +9,16 @@ def nv_grab(url):
     clean = re.compile('<.*?>')
     source_url = url
     r = requests.get(source_url)
+    print(r.status_code)
     soup = BeautifulSoup(r.text, 'html.parser')
     for img in soup.find_all("p", {'class': 'article__content__head_img-info'}):
         img.decompose()
     t = soup.find(
         "div", {'class': 'article__content__head__text'}).find_all('h1')
     p = soup.find(
-        "div", {'class': 'content_wrapper'}).find_all('p')
+        "div", {'class': 'content_wrapper'}).find_all(['p', 'li'])
     body = []
-    for i in p:
+    for i in p:  # I had no patience to properly filter out these two tags, so skipping them is just hardocded here
         if 'Відео дня' in str(i):
             continue
         if 'Теги' in str(i):
@@ -46,18 +47,3 @@ def gpt_query(prefix, query, oai_key, model_key):
 
     print(result)
     return (result)
-
-
-url = "https://nv.ua/ukr/ukraine/events/v-nasa-sprostuvali-padinnya-suputnika-v-kiyevi-novini-ukrajini-50318987.html"
-article = nv_grab(url)
-
-article_full = article['head']
-
-for p in article['body']:
-    article_full = article_full + '\n' + p
-
-with open('out.txt', 'w', encoding='utf-8') as f:
-    f.write('\n\n' + url + '\n\n')
-    f.write(article['head'] + '\n')
-    for p in article['body']:
-        f.write(p + '\n')
