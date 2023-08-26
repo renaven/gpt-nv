@@ -6,15 +6,22 @@ import openai
 
 
 def nv_grab(url):
+    headers = {'User-Agent': 'Mozilla/5.0'}
+    cookies = {'CONSENT': "YES+"}
     clean = re.compile('<.*?>')
-    source_url = url
-    r = requests.get(source_url)
-    print(r.status_code)
+    r = requests.get(url, headers=headers, cookies=cookies)
     soup = BeautifulSoup(r.text, 'html.parser')
+
     for img in soup.find_all("p", {'class': 'article__content__head_img-info'}):
         img.decompose()
-    t = soup.find(
-        "div", {'class': 'article__content__head__text'}).find_all('h1')
+
+    try:
+        t = soup.find(
+            "div", {'class': 'article__content__head__text'}).find_all('h1')
+    except:
+        t = soup.find(
+            "div", {'class': 'article-content-body'}).find_all('h1')
+
     p = soup.find(
         "div", {'class': 'content_wrapper'}).find_all(['p', 'li'])
     body = []
