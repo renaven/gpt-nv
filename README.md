@@ -4,6 +4,7 @@ Dependancies:
 requries two additional Python libraries, OpenAI and BeautifulSoup. Install using the following console commands:
 
 pip install openai
+
 pip install bs4
 
 Config:
