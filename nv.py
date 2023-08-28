@@ -12,6 +12,10 @@ def nv_grab(url):
     r = requests.get(url, headers=headers, cookies=cookies)
     soup = BeautifulSoup(r.text, 'html.parser')
 
+    for read_also_li in soup.find_all(
+            'ul', {'class': 'media__also__news_links__list'}):
+        read_also_li.decompose()
+
     for img in soup.find_all("p", {'class': 'article__content__head_img-info'}):
         img.decompose()
 
